@@ -15,24 +15,24 @@ LIBS += `pkg-config opencv --libs`
 CONFIG += c++11
 
 SOURCES += main.cpp\
-        tool.cpp \
-        sample.cpp \
-        dataset.cpp \
-        EGBS.cpp DisjointSet.cpp graph.cpp \
-    mqlabel.cpp \
-    selector.cpp \
-    circle.cpp \
-    polygon.cpp \
-    line.cpp
+        src/tool.cpp \
+        src/sample.cpp \
+        src/dataset.cpp \
+        src/EGBS.cpp src/DisjointSet.cpp src/graph.cpp \
+    src/mqlabel.cpp \
+    src/selector.cpp \
+    src/circle.cpp \
+    src/polygon.cpp \
+    src/line.cpp
 
-HEADERS  += tool.h \
-    dataset.h \
-    EGBS.h DisjointSet.h graph.h \
-    sample.h \
-    mqlabel.h \
-    selector.h \
-    circle.h \
-    polygon.h \
-    line.h
+HEADERS  += src/tool.h \
+    src/dataset.h \
+    src/EGBS.h src/DisjointSet.h src/graph.h \
+    src/sample.h \
+    src/mqlabel.h \
+    src/selector.h \
+    src/circle.h \
+    src/polygon.h \
+    src/line.h
 
 FORMS    += tool.ui
