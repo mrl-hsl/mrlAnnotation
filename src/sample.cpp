@@ -17,7 +17,7 @@ void sample::imRead(){
     }
 }
 
-void sample::addSegment(cv::Vec3b color,cv::Vec3b type){
+void sample::setAnnotation(cv::Vec3b color, cv::Vec3b type){
     for(int i = 0;i < img.rows;i++){
         for(int j=0;j<img.cols;j++){
             if(sMask.at<cv::Vec3b>(i,j) == color){
@@ -25,6 +25,10 @@ void sample::addSegment(cv::Vec3b color,cv::Vec3b type){
             }
         }
     }
+}
+void sample::setAnnotation(cv::Rect object, int type){
+    bbox a(object,type);
+    objects.push_back(a);
 }
 
 void sample::removeSegment(cv::Vec3b color){
