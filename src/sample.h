@@ -7,26 +7,13 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
-struct ball{
-    int radius;
-    cv::Point center;
-};
+
 struct goalPost{
     std::vector<cv::Point> points;
 };
 struct bbox{
-    cv::Point tl,br;
-};
-struct robot{
-    bbox bBox;
-};
-struct landMarks{
-    bbox bBox;
+    cv::Rect box;
     int type;
-};
-
-struct fieldBoundary{
-    std::vector<cv::Point> points;
 };
 
 class sample{
@@ -38,7 +25,6 @@ public:
     void imRead();
 
     void setSMask(cv::Mat _sMask);
-    void addSegment(cv::Vec3b color,cv::Vec3b type);
     void removeSegment(cv::Vec3b color);
 
     cv::Mat getImg();
@@ -48,21 +34,25 @@ public:
     std::string getName();
     std::string getPath();
 
+    typedef std::vector<bbox>::iterator iterator;
+    void setAnnotation(cv::Vec3b color, cv::Vec3b type);
+    void setAnnotation(cv::Rect object, int type);
+    iterator begin(){return objects.begin();}
+    iterator end(){return objects.end();}
 
 private:
 
     std::string fileAddress;
     std::string fileName;
 
-    fieldBoundary fb;
     cv::Mat mask;
-    cv::Mat selects_mask;
     cv::Mat img;
     cv::Mat sMask;
+    std::vector<bbox> objects;
 
-    std::vector<ball> balls;
-    std::vector<robot> robots;
-    std::vector<landMarks> lms;
+    cv::Mat selects_mask;
+
+
     std::vector<goalPost> gps;
 };
 

@@ -1,6 +1,6 @@
 #include "selector.h"
 
-void Selector::is_drawing(bool a){
+void Selector::setStatus(bool a){
     drawing = a;
 }
 bool Selector::is_drawing(){

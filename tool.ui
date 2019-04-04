@@ -171,32 +171,36 @@
       </widget>
      </item>
      <item>
-      <widget class="QRadioButton" name="t_ball">
-       <property name="text">
-        <string>Ball</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QRadioButton" name="t_goal">
-       <property name="text">
-        <string>GoalPost</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QRadioButton" name="radioButton">
-       <property name="text">
-        <string>Cen&amp;terCircle</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QRadioButton" name="t_penalty">
-       <property name="text">
-        <string>pe&amp;naltyMark</string>
-       </property>
-      </widget>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="QRadioButton" name="t_ball">
+         <property name="text">
+          <string>Ball</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="t_goal">
+         <property name="text">
+          <string>GoalPost</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="t_penalty">
+         <property name="text">
+          <string>pe&amp;naltyMark</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="radioButton">
+         <property name="text">
+          <string>Cen&amp;terCircle</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
      <item>
       <widget class="QSpinBox" name="k">

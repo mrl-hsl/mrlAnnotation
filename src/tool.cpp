@@ -144,6 +144,18 @@ void tool::mousePose(){
 
 void tool::mousePressdOnImg()
 {
+    if(ui->s_box->isChecked()){
+        selector.selectBox(cv::Point(ui->lbl.x,ui->lbl.y),type);
+    }else if(ui->s_polygon->isChecked()){
+        selector.selectPolygon(cv::Point(ui->lbl.x,ui->lbl.y),type);
+    }else if(ui->s_line->isChecked()){
+        selector.selectLine(cv::Point(ui->lbl.x,ui->lbl.y),type);
+    }
+
+
+
+
+
     if(ui->s_circle->isChecked()){
         cv::Point2d M_pos(std::max(std::min(ui->lbl->x,ui->lbl->width()-4),0),ui->lbl->y);
         if(ui->lbl->left==true){

@@ -66,6 +66,8 @@ private:
     Ui::tool *ui;
     dataSet _dataSet;
     int currentSample=0;
+    Selector selector;
+
     EGBS egbs;
     sample current;
     cv::Vec3b type;
@@ -77,6 +79,8 @@ private:
     std::vector<Line > Lines;
     void pattern_planning(cv::Mat);
     void clear_selectors();
+
+
 };
 
 #endif // TOOL_H
