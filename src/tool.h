@@ -9,8 +9,6 @@
 #include "QDir"
 #include "ui_tool.h"
 #include "selector.h"
-#include "polygon.h"
-#include "circle.h"
 #include "line.h"
 #include "EGBS.h"
 
@@ -28,7 +26,7 @@ public:
     void showSample();
     void loadSample(int);
     void suggestSegments();
-
+    void showAnnotation(cv::Mat& img);
 private slots:
     void on_btn_Open_clicked();
 
@@ -61,24 +59,16 @@ private slots:
     void on_t_penalty_clicked();
 
     void on_radioButton_clicked();
-
 private:
     Ui::tool *ui;
     dataSet _dataSet;
     int currentSample=0;
     Selector selector;
-
     EGBS egbs;
     sample current;
     cv::Vec3b type;
-    bool drawing_circle=false;
-    bool drawing_polygon=false;
-    bool drawing_line=false;
-    std::vector<Circle> Cirs;
-    std::vector<Polygon> Pols;
-    std::vector<Line > Lines;
-    void pattern_planning(cv::Mat);
-    void clear_selectors();
+    int classType;
+    void rm_selectors();
 
 
 };

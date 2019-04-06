@@ -7,13 +7,14 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
-
 struct goalPost{
     std::vector<cv::Point> points;
 };
 struct bbox{
-    cv::Rect box;
-    int type;
+  bbox(){}
+  bbox(cv::Rect _box,int _type):box(_box),type(_type){}
+  cv::Rect box;
+  int type;
 };
 
 class sample{
@@ -49,9 +50,7 @@ private:
     cv::Mat img;
     cv::Mat sMask;
     std::vector<bbox> objects;
-
     cv::Mat selects_mask;
-
 
     std::vector<goalPost> gps;
 };

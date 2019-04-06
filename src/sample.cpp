@@ -1,5 +1,6 @@
 #include "sample.h"
 #include "iostream"
+
 sample::sample(){
 
 }
