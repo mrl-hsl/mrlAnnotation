@@ -1,5 +1,5 @@
-#include "tool.h"
 #include <QApplication>
+#include "src/tool.h"
 
 int main(int argc, char *argv[])
 {
