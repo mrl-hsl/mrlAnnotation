@@ -20,19 +20,13 @@ SOURCES += main.cpp\
         src/dataset.cpp \
         src/EGBS.cpp src/DisjointSet.cpp src/graph.cpp \
     src/mqlabel.cpp \
-    src/selector.cpp \
-    src/circle.cpp \
-    src/polygon.cpp \
-    src/line.cpp
+    src/selector.cpp
 
 HEADERS  += src/tool.h \
     src/dataset.h \
     src/EGBS.h src/DisjointSet.h src/graph.h \
     src/sample.h \
     src/mqlabel.h \
-    src/selector.h \
-    src/circle.h \
-    src/polygon.h \
-    src/line.h
+    src/selector.h
 
 FORMS    += tool.ui

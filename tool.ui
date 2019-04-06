@@ -171,36 +171,32 @@
       </widget>
      </item>
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout_3">
-       <item>
-        <widget class="QRadioButton" name="t_ball">
-         <property name="text">
-          <string>Ball</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QRadioButton" name="t_goal">
-         <property name="text">
-          <string>GoalPost</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QRadioButton" name="t_penalty">
-         <property name="text">
-          <string>pe&amp;naltyMark</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QRadioButton" name="radioButton">
-         <property name="text">
-          <string>Cen&amp;terCircle</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
+      <widget class="QRadioButton" name="t_ball">
+       <property name="text">
+        <string>Ball</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="t_goal">
+       <property name="text">
+        <string>GoalPost</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="radioButton">
+       <property name="text">
+        <string>&amp;CenterCircle</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="t_penalty">
+       <property name="text">
+        <string>pe&amp;naltyMark</string>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QSpinBox" name="k">
@@ -301,7 +297,7 @@
      <rect>
       <x>10</x>
       <y>500</y>
-      <width>181</width>
+      <width>241</width>
       <height>191</height>
      </rect>
     </property>
@@ -321,9 +317,9 @@
       </widget>
      </item>
      <item>
-      <widget class="QRadioButton" name="s_brash">
+      <widget class="QRadioButton" name="s_box">
        <property name="text">
-        <string>Brash Selector</string>
+        <string>Bounding_Bo&amp;x Selector</string>
        </property>
       </widget>
      </item>
