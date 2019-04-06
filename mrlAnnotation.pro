@@ -20,13 +20,14 @@ SOURCES += main.cpp\
         src/dataset.cpp \
         src/EGBS.cpp src/DisjointSet.cpp src/graph.cpp \
     src/mqlabel.cpp \
-    src/selector.cpp
+    src/Selector.cpp
 
 HEADERS  += src/tool.h \
     src/dataset.h \
     src/EGBS.h src/DisjointSet.h src/graph.h \
-    src/sample.h \
     src/mqlabel.h \
-    src/selector.h
+    src/selector.h \
+    src/annotations.h \
+    src/Sample.h
 
 FORMS    += tool.ui
