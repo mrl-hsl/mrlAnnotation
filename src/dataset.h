@@ -1,6 +1,6 @@
 #ifndef DATASET_H
 #define DATASET_H
-#include "sample.h"
+#include "Sample.h"
 
 class dataSet
 {
@@ -9,13 +9,20 @@ public:
         samples.reserve(estimatedSize);
     }
     dataSet();
-    void addSample(sample);
-    sample getSample(int id);
-    void setSample(int id,sample);
+    void addSample(Sample);
+    void initDataSet(){current = samples.begin();}
+    Sample getSample(int id);
+    void setSample(int id,Sample);
     void saveSample(int id);
     int getSize();
+
+    typedef std::vector<Sample>::iterator iterator;
+    iterator current;
+    void next(){if(current != samples.end()-1){current++;};}
+    void prev(){if(current > samples.begin()){current--;};}
+
 private:
-    std::vector<sample> samples;
+    std::vector<Sample> samples;
 };
 
 #endif // DATASET_H

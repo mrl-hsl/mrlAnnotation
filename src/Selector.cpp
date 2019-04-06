@@ -1,5 +1,5 @@
 #include "selector.h"
-
+#include "iostream"
 void Selector::setStatus(bool a){
     drawing = a;
 }
@@ -9,8 +9,7 @@ bool Selector::is_drawing(){
 
 void Selector::selectBox(cv::Point point, int type){
     if(drawing){
-        tBox.box.width = point.x - tBox.box.x;
-        tBox.box.height = point.y - tBox.box.y;
+        tBox.box = cv::Rect(tBox.box.tl(),point);
         tBox.type = type;
         objects.push_back(tBox);
         drawing = false;
@@ -53,10 +52,11 @@ inline bool Selector::inBox(cv::Point point, cv::Rect rect){
 }
 void Selector::removeBox(cv::Point point){
     //Posibel seg fult
-    for(std::vector<bbox>::iterator box = objects.begin();box<objects.end();box++){
-        if(inBox(point,box->box)){
+    std::cout<<"remove"<<std::endl;
+    for(std::vector<bbox>::iterator box = objects.begin(); box < objects.end();box++){
+        if(box->box.contains(point)){
+            std::cout<<"removeee"<<std::endl;
             objects.erase(box);
-            break;
         }
     }
 }

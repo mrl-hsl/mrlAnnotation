@@ -35,49 +35,50 @@ tool::~tool(){
     delete ui;
 }
 
-void tool::loadSample(int id){
-    current = _dataSet.getSample(id);
-    current.imRead();
+void tool::loadSample(){
+    std::cout<<"ggg"<<std::endl;
+    _dataSet.current->imRead();
+    std::cout<<"read"<<std::endl;
     tool::suggestSegments();
     tool::showSample();
 }
 
 void tool::suggestSegments(){
-    cv::Mat fw= current.getImg();
+    cv::Mat fw= _dataSet.current->getImg();
     cv::Mat img;
     fw.copyTo(img);
     if(ui->checkBox->isChecked()){
         egbs.applySegmentation(img, ui->k->value(), ui->v->value());
     }
-    current.setSMask(img);
+    _dataSet.current->setSMask(img);
 }
 
 void tool::showAnnotation(cv::Mat &img){
-    if(selector.is_drawing()){
+    if(_dataSet.current->is_drawing()){
         if(ui->s_box->isChecked()){
-            cv::rectangle(img,cv::Point(selector.tBox.box.x,selector.tBox.box.y),cv::Point(ui->lblMask->x,ui->lblMask->y),cv::Scalar(255,255,255));
+          cv::rectangle(img, cv::Point(_dataSet.current->tBox.box.x, _dataSet.current->tBox.box.y),
+                        ui->lbl->pos, cv::Scalar(0,0,255), 2);
         }
         else if(ui->s_polygon->isChecked()){
-            std::vector<cv::Point>::iterator pt_it = selector.tPolygons.begin();
-            for(;pt_it<selector.tPolygons.end();pt_it++){
+            std::vector<cv::Point>::iterator pt_it = _dataSet.current->tPolygons.begin();
+            for(;pt_it<_dataSet.current->tPolygons.end();pt_it++)
                 cv::line(img,*pt_it,*(pt_it+1),cv::Scalar(255,255,255));
-            }
-            cv::line(img,*(pt_it+1),cv::Point(ui->lblMask->x,ui->lblMask->y),cv::Scalar(255,255,255));
+            cv::line(img,*(pt_it), ui->lbl->pos, cv::Scalar(255,255,255));
         }
         else if(ui->s_line->isChecked()){
-            cv::line(img,selector.tLine.p1,cv::Point(ui->lblMask->x,ui->lblMask->y),cv::Scalar(255,255,255));
+            cv::line(img,_dataSet.current->tLine.p1,cv::Point(ui->lblMask->x,ui->lblMask->y),cv::Scalar(255,255,255));
         }
     }
     else{
-        for(std::vector<bbox>::iterator bbox_it = selector.objects.begin();bbox_it<selector.objects.end();bbox_it++){
-            cv::rectangle(img,bbox_it->box,cv::Scalar(255,255,255));
+        for(std::vector<bbox>::iterator bbox_it = _dataSet.current->objects.begin();bbox_it<_dataSet.current->objects.end();bbox_it++){
+            cv::rectangle(img,bbox_it->box,cv::Scalar(255,0,0),2);
         }
-        for(std::vector<Polygon>::iterator pol_it = selector.polygons.begin();pol_it<selector.polygons.end();pol_it++){
+        for(std::vector<Polygon>::iterator pol_it = _dataSet.current->polygons.begin();pol_it<_dataSet.current->polygons.end();pol_it++){
             for(Polygon::iterator pt_it = pol_it->begin() ; pt_it<(pol_it->end()-1);pt_it++){
                 cv::line(img,*pt_it,*(pt_it+1),cv::Scalar(255,255,255));
             }
         }
-        for(std::vector<Line>::iterator line_it=selector.lines.begin(); line_it<selector.lines.end(); line_it++){
+        for(std::vector<Line>::iterator line_it=_dataSet.current->lines.begin(); line_it<_dataSet.current->lines.end(); line_it++){
             cv::line(img,line_it->p1,line_it->p2,cv::Scalar(255,255,255));
         }
     }
@@ -86,26 +87,26 @@ void tool::showAnnotation(cv::Mat &img){
 void tool::showSample(){
 
     cv::Mat img;
-    current.getImg().copyTo(img);
-    cv::Mat mask = current.getMask();
-    cv::Mat sMask = current.getSMask();
-    cv::Mat selmask = current.getSelectsMask();
-    for(int i =0;i<img.rows;i++){
-        for(int j = 0;j<img.cols;j++){
-            if(mask.at<cv::Vec3b>(i,j)!=cv::Vec3b(0,0,0)){
-                img.at<cv::Vec3b>(i,j)=mask.at<cv::Vec3b>(i,j);
-            }
-            if(selmask.at<cv::Vec3b>(i,j)!=cv::Vec3b(0,0,0)){
-                img.at<cv::Vec3b>(i,j)=selmask.at<cv::Vec3b>(i,j);
-            }
-        }
-    }
+    _dataSet.current->getImg().copyTo(img);
+    //cv::Mat mask = current.getMask();
+    //cv::Mat sMask = current.getSMask();
+    //cv::Mat selmask = current.getSelectsMask();
+//    for(int i =0;i<img.rows;i++){
+//        for(int j = 0;j<img.cols;j++){
+//            if(mask.at<cv::Vec3b>(i,j)!=cv::Vec3b(0,0,0)){
+//                img.at<cv::Vec3b>(i,j)=mask.at<cv::Vec3b>(i,j);
+//            }
+//            if(selmask.at<cv::Vec3b>(i,j)!=cv::Vec3b(0,0,0)){
+//                img.at<cv::Vec3b>(i,j)=selmask.at<cv::Vec3b>(i,j);
+//            }
+//        }
+//    }
     showAnnotation(img);
 
     ui->lbl->setPixmap(QPixmap::fromImage(QImage(img.data,img.cols,img.rows
                                           ,img.step,QImage::Format_RGB888 )));
-    ui->lblMask->setPixmap(QPixmap::fromImage(QImage(sMask.data,img.cols,img.rows
-                                          ,img.step,QImage::Format_RGB888 )));
+   // ui->lblMask->setPixmap(QPixmap::fromImage(QImage(sMask.data,img.cols,img.rows
+     //                                     ,img.step,QImage::Format_RGB888 )));
 }
 
 void tool::on_btn_Open_clicked(){
@@ -116,31 +117,33 @@ void tool::on_btn_Open_clicked(){
             if(item.isDir())
                 qDebug() << "Dir: " << item.absoluteFilePath();
             else if(item.isFile()){
-//                qDebug() << "File: " << item.absoluteFilePath();
+                qDebug() << "File: " << item.absoluteFilePath();
                 QString filePath = dir.absolutePath();
                 QString fileName = item.fileName();
-                sample temp(filePath.toStdString(),fileName.toStdString());
+                Sample temp(filePath.toStdString(),fileName.toStdString());
                 _dataSet.addSample(temp);
             }
         }
     if(_dataSet.getSize()>0){
+        _dataSet.initDataSet();
         ui->lblMask->setEnabled(true);
-        tool::loadSample(currentSample);
+        ui->lbl->setEnabled(true);
+        tool::loadSample();
     }
 }
 
 void tool::on_btn_Next_clicked(){
     if(_dataSet.getSize()<1)
         return;
-    currentSample = std::min(_dataSet.getSize()-1,currentSample+1);
-    tool::loadSample(currentSample);
+    _dataSet.next();
+    tool::loadSample();
 }
 
 void tool::on_btn_Prev_clicked(){
     if(_dataSet.getSize()<1)
         return;
-    currentSample = std::max(0,currentSample-1);
-    tool::loadSample(currentSample);
+    _dataSet.prev();
+    tool::loadSample();
 }
 void tool::on_k_editingFinished(){
     tool::suggestSegments();
@@ -153,19 +156,19 @@ void tool::on_v_editingFinished(){
 }
 
 void tool::mousePressd(){
-    cv::Mat sMask = current.getSMask();
+    cv::Mat sMask = _dataSet.current->getSMask();
     cv::Vec3b segment = sMask.at<cv::Vec3b>(ui->lblMask->y,ui->lblMask->x);
     if(ui->lblMask->left==true){
-        current.setAnnotation(segment,type);
+        //current.setAnnotation(segment,type);
     }else{
-        current.removeSegment(segment);
+        //current.removeSegment(segment);
     }
     showSample();
 
 }
 
 void tool::mousePose(){
-  cv::Mat sMask = current.getSMask();
+  cv::Mat sMask = _dataSet.current->getSMask();
   cv::Vec3b segment = sMask.at<cv::Vec3b>(ui->lblMask->y,ui->lblMask->x);
   cv::Mat color(ui->color->height(),ui->color->width(),CV_8UC3,cv::Scalar(segment[0],segment[1],segment[2]));
 
@@ -174,27 +177,25 @@ void tool::mousePose(){
 }
 
 void tool::mousePressdOnImg(){
-    if(ui->lblMask->left){
+    if(ui->lbl->left){
       if(ui->s_box->isChecked()){
-        selector.selectBox(ui->lbl->pos,classType);
+        _dataSet.current->selectBox(ui->lbl->pos,classType);
       }else if(ui->s_polygon->isChecked()){
-        selector.selectPolygon(ui->lbl->pos,classType);
+        _dataSet.current->selectPolygon(ui->lbl->pos,classType);
       }else if(ui->s_line->isChecked()){
-        selector.selectLine(ui->lbl->pos,classType);
+        _dataSet.current->selectLine(ui->lbl->pos,classType);
       }
-    if(!selector.is_drawing())
-      showSample();
     }
     else{
       if(ui->s_box->isChecked()){
-        selector.removeBox(ui->lbl->pos);
+        _dataSet.current->removeBox(ui->lbl->pos);
       }
-      showSample();
     }
+    showSample();
 }
 void tool::mousePoseOnImg(){
-  //if(selector.is_drawing())
-    //showSample();
+  if(_dataSet.current->is_drawing())
+    showSample();
 }
 void tool::on_t_lines_clicked(){
     type = cv::Vec3b(255,255,255);
@@ -216,9 +217,8 @@ void tool::on_t_goal_clicked(){
 void tool::on_save_clicked(){
     if(_dataSet.getSize()<1)
         return;
-    _dataSet.setSample(currentSample,current);
-    cv::Mat selmask=current.getSelectsMask();
-    _dataSet.saveSample(currentSample);
+    //_dataSet.setSample(currentSample,current);
+    //_dataSet.saveSample(currentSample);
     on_btn_Next_clicked();
 }
 

@@ -9,7 +9,6 @@
 #include "QDir"
 #include "ui_tool.h"
 #include "selector.h"
-#include "line.h"
 #include "EGBS.h"
 
 namespace Ui {
@@ -24,7 +23,7 @@ public:
     explicit tool(QWidget *parent = 0);
     ~tool();
     void showSample();
-    void loadSample(int);
+    void loadSample();
     void suggestSegments();
     void showAnnotation(cv::Mat& img);
 private slots:
@@ -62,10 +61,7 @@ private slots:
 private:
     Ui::tool *ui;
     dataSet _dataSet;
-    int currentSample=0;
-    Selector selector;
     EGBS egbs;
-    sample current;
     cv::Vec3b type;
     int classType;
     void rm_selectors();
