@@ -5,7 +5,7 @@
 #include <QLabel>
 #include <QMouseEvent>
 #include <QEvent>
-
+#include <opencv2/core.hpp>
 class mqlabel : public QLabel
 {
     Q_OBJECT
@@ -14,6 +14,7 @@ public:
     void mousePressEvent(QMouseEvent *ev);
     void mouseMoveEvent(QMouseEvent *ev);
     int x,y;
+    cv::Point pos;
     bool left;
 
 signals:

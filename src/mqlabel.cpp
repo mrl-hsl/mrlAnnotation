@@ -17,5 +17,7 @@ void mqlabel::mousePressEvent(QMouseEvent *ev){
 void mqlabel::mouseMoveEvent(QMouseEvent *ev){
     x = ev->x();
     y = ev->y();
+    pos.x = int(ev->x());
+    pos.y = int(ev->y());
     emit mousePos();
 }
