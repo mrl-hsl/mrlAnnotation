@@ -5,12 +5,12 @@
 #include "DisjointSet.h"
 
 struct Edge {
-    int a, b;
-    float weight;
+  int a, b;
+  float weight;
 
-    bool operator<(const Edge &other) {
-        return weight < other.weight;
-    }
+  bool operator<(const Edge &other) {
+    return weight < other.weight;
+  }
 };
 
 float diff(const cv::Mat &image, int x1, int y1, int x2, int y2);

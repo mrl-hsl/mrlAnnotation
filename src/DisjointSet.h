@@ -4,9 +4,9 @@
 #include<vector>
 
 typedef struct {
-    int parent;
-    int rank;
-    int size;
+  int parent;
+  int rank;
+  int size;
 } Node;
 
 typedef std::vector <Node> Forest;
@@ -17,18 +17,18 @@ typedef std::vector <Node> Forest;
  */
 class DisjointSet {
 public:
-    DisjointSet();
+  DisjointSet();
 
-    DisjointSet(int num_elements);
+  DisjointSet(int num_elements);
 
-    int find(int x);
+  int find(int x);
 
-    void merge(int x, int y);
+  void merge(int x, int y);
 
-    int size(int x) const;
+  int size(int x) const;
 
 private:
-    Forest elements;
+  Forest elements;
 };
 
 #endif // DISJOINTSET_H

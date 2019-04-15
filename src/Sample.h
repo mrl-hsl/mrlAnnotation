@@ -11,28 +11,28 @@
 class Sample : public Selector{
 
 public:
-    Sample(std::string address,std::string name):fileAddress(address),fileName(name){}
-    Sample();
-    void imRead();
+  Sample(std::string address,std::string name):fileAddress(address),fileName(name){}
+  Sample();
+  void imRead();
 
-    void setSMask(cv::Mat _sMask);
-    void removeSegment(cv::Vec3b color);
+  void setSMask(cv::Mat _sMask);
+  void removeSegment(cv::Vec3b color);
 
-    cv::Mat getImg();
-    cv::Mat getMask();
-    cv::Mat getSMask();
+  cv::Mat getImg();
+  cv::Mat getMask();
+  cv::Mat getSMask();
 
-    std::string getName();
-    std::string getPath();
+  std::string getName();
+  std::string getPath();
+
+
 
 private:
 
-    std::string fileAddress;
-    std::string fileName;
-
-    cv::Mat mask;
-    cv::Mat img;
-    cv::Mat sMask;
+  std::string fileAddress;
+  std::string fileName;
+  cv::Mat img;
+  cv::Mat sMask;
 };
 
 #endif // SAMPLE_H

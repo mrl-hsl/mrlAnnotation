@@ -5,28 +5,28 @@
 #include "graph.h"
 
 struct Component {
-    int count;
-    cv::Vec3f color_sum;
+  int count;
+  cv::Vec3f color_sum;
 
-    struct Component &operator+=(const Component &rhs) {
-        count += rhs.count;
-        color_sum += rhs.color_sum;
-        return *this;
-    }
+  struct Component &operator+=(const Component &rhs) {
+    count += rhs.count;
+    color_sum += rhs.color_sum;
+    return *this;
+  }
 
-    cv::Vec3f getAverageColor() {
-        return color_sum / count;
-    }
+  cv::Vec3f getAverageColor() {
+    return color_sum / count;
+  }
 };
 
 class EGBS {
 public:
-    EGBS();
+  EGBS();
 
-    void applySegmentation(cv::Mat &image, int c, int min_size);
+  void applySegmentation(cv::Mat &image, int c, int min_size);
 
 private:
-    void recolor(cv::Mat &image, DisjointSet &forest);
+  void recolor(cv::Mat &image, DisjointSet &forest);
 };
 
 #endif // EGBS_H

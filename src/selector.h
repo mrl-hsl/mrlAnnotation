@@ -7,30 +7,34 @@
 
 class Selector {
 public:
-    Selector(){}
-    ~Selector(){}
+  Selector(){}
+  ~Selector(){}
 
-    void setStatus(bool);
-    bool is_drawing();
+  void setStatus(bool);
+  bool is_drawing();
 
-    void selectBox(cv::Point,int);
-    void selectPolygon(cv::Point,int);
-    void selectLine(cv::Point,int);
-    void selectSegment(cv::Scalar,int);
-    void removeBox(cv::Point);
-    inline bool inBox(cv::Point,cv::Rect);
+  void selectBox(cv::Point,int);
+  void selectPolygon(cv::Point,int);
+  void selectLine(cv::Point,int);
+  void selectSegment(cv::Scalar,int);
+  void removeBox(cv::Point);
+  void removePolygon(cv::Point);
 
-    std::vector<bbox> objects;
-    std::vector<Polygon> polygons;
-    std::vector<Line> lines;
-    Line tLine;
-    Polygon tPolygons;
-    bbox tBox;
+  void fillPolygon(Polygon&,cv::Scalar);
+//    inline bool inBox(cv::Point,cv::Rect);
+  bool inPol(const cv::Point, Polygon);
+  std::vector<bbox> objects;
+  std::vector<Polygon> polygons;
+  std::vector<Line> lines;
+  Line tLine;
+  Polygon tPolygons;
+  bbox tBox;
+  cv::Mat mask;
+  cv::Mat drawingMask;
+  cv::Mat selectionMask;
 
 private:
-    bool drawing = false;
-    std::vector<cv::Point2d> pts;
-
+  bool drawing = false;
 
 
 };

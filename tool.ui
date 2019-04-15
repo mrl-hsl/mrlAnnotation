@@ -299,8 +299,8 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>500</y>
-      <width>241</width>
+      <y>510</y>
+      <width>111</width>
       <height>191</height>
      </rect>
     </property>
@@ -308,28 +308,21 @@
      <item>
       <widget class="QRadioButton" name="s_polygon">
        <property name="text">
-        <string>Pol&amp;ygon Selector</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QRadioButton" name="s_circle">
-       <property name="text">
-        <string>Circle Selector</string>
+        <string>Pol&amp;ygon</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QRadioButton" name="s_box">
        <property name="text">
-        <string>Bounding_Bo&amp;x Selector</string>
+        <string>Bo&amp;x</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QRadioButton" name="s_line">
        <property name="text">
-        <string>Line Selector</string>
+        <string>Line</string>
        </property>
       </widget>
      </item>
