@@ -39,19 +39,10 @@ void tool::loadSample(){
   std::cout<<"ggg"<<std::endl;
   _dataSet.current->imRead();
   std::cout<<"read"<<std::endl;
-  tool::suggestSegments();
+  _dataSet.current->suggestSegments(egbs,ui->k->value(),ui->v->value());
   tool::showSample();
 }
 
-void tool::suggestSegments(){
-  cv::Mat fw= _dataSet.current->getImg();
-  cv::Mat img;
-  fw.copyTo(img);
-  if(ui->checkBox->isChecked()){
-    egbs.applySegmentation(img, ui->k->value(), ui->v->value());
-  }
-  _dataSet.current->setSMask(img);
-}
 
 void tool::showAnnotation(cv::Mat &img){
   if(_dataSet.current->is_drawing()){
@@ -76,42 +67,31 @@ void tool::showAnnotation(cv::Mat &img){
       for(Polygon::iterator pt_it = pol_it->begin() ; pt_it < pol_it->end()-1;pt_it++){
         cv::line(img,*pt_it,*(pt_it+1),cv::Scalar(255,255,255));
       }
-      //*******************************************
-//      _dataSet.current->filPol(*pol_it);
-//      showSample();
-      //********************************************
     }
     for(std::vector<Line>::iterator line_it=_dataSet.current->lines.begin(); line_it<_dataSet.current->lines.end(); line_it++){
       cv::line(img,line_it->p1,line_it->p2,cv::Scalar(255,255,255));
     }
   }
 }
-
+void tool::showSegmentaion(cv::Mat & img){
+    _dataSet.current->generateMask();
+    std::cout<<"de"<<std::endl;
+    _dataSet.current->segmentaions.copyTo(img);
+    std::cout<<"deds"<<std::endl;
+}
 void tool::showSample(){
   cv::Mat img;
   _dataSet.current->getImg().copyTo(img);
-    //cv::Mat mask = current.getMask();
-    //cv::Mat sMask = current.getSMask();
-    //cv::Mat selmask = current.getSelectsMask();
-//    for(int i =0;i<img.rows;i++){
-//        for(int j = 0;j<img.cols;j++){
-//            if(mask.at<cv::Vec3b>(i,j)!=cv::Vec3b(0,0,0)){
-//                img.at<cv::Vec3b>(i,j)=mask.at<cv::Vec3b>(i,j);
-//            }
-//            if(selmask.at<cv::Vec3b>(i,j)!=cv::Vec3b(0,0,0)){
-//                img.at<cv::Vec3b>(i,j)=selmask.at<cv::Vec3b>(i,j);
-//            }
-//        }
-//    }
-  //********************************************
-  showAnnotation(img);
-
-//  ************************************************/***/
+  if(ui->showMask->isChecked()){
+      showSegmentaion(img);
+  }else{
+    showAnnotation(img);
+  }
 
   ui->lbl->setPixmap(QPixmap::fromImage(QImage(img.data,img.cols,img.rows
                                           ,img.step,QImage::Format_RGB888 )));
-   // ui->lblMask->setPixmap(QPixmap::fromImage(QImage(sMask.data,img.cols,img.rows
-     //                                     ,img.step,QImage::Format_RGB888 )));
+  ui->lblMask->setPixmap(QPixmap::fromImage(QImage(_dataSet.current->suggstedSegments.data,img.cols,img.rows
+                                          ,img.step,QImage::Format_RGB888 )));
 }
 
 void tool::on_btn_Open_clicked(){
@@ -150,22 +130,21 @@ void tool::on_btn_Prev_clicked(){
   tool::loadSample();
 }
 void tool::on_k_editingFinished(){
-  tool::suggestSegments();
+  _dataSet.current->suggestSegments(egbs,ui->k->value(),ui->v->value());
   tool::showSample();
 }
 
 void tool::on_v_editingFinished(){
-  tool::suggestSegments();
+  _dataSet.current->suggestSegments(egbs,ui->k->value(),ui->v->value());
   tool::showSample();
 }
 
 void tool::mousePressd(){
-  cv::Mat sMask = _dataSet.current->getSMask();
-  cv::Vec3b segment = sMask.at<cv::Vec3b>(ui->lblMask->y,ui->lblMask->x);
   if(ui->lblMask->left==true){
-        //current.setAnnotation(segment,type);
+      _dataSet.current->selectSegment(ui->lblMask->pos,50);
   }else{
-        //current.removeSegment(segment);
+        _dataSet.current->removeSegment(ui->lblMask->pos);
+        std::cout<<"d23r"<<std::endl;
   }
   showSample();
 }
@@ -234,4 +213,8 @@ void tool::on_t_penalty_clicked(){
 
 void tool::on_radioButton_clicked(){
   type=cv::Vec3b(0,255,255);
+}
+
+void tool::on_showMask_clicked(){
+    showSample();
 }

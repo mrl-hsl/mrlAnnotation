@@ -11,9 +11,10 @@ void Sample::imRead(){
     cv::resize(img,img,cv::Size(640,480));
     sMask = cv::Mat(img.rows,img.cols,CV_8UC3,cv::Scalar(0,0,0));
     selectionMask = cv::Mat(img.rows,img.cols,CV_8UC3,cv::Scalar(0,0,0));
-//        mask =  cv::Mat(img.rows,img.cols,CV_8UC3,cv::Scalar(0,0,0));
+    drawingMask = cv::Mat(img.rows,img.cols,CV_8UC3,cv::Scalar(0,0,0));
+    img.copyTo(suggstedSegments);
     cv::cvtColor(img,img,CV_BGR2RGB);
-    cv::cvtColor(sMask,sMask,CV_BGR2RGB);
+    cv::cvtColor(suggstedSegments,suggstedSegments,CV_BGR2RGB);
     }
 }
 
@@ -31,15 +32,27 @@ void Sample::imRead(){
 cv::Mat Sample::getImg(){
   return img;
 }
-//cv::Mat Sample::getMask(){
-//    return mask;
-//}
+
 void Sample::setSMask(cv::Mat _sMask){
-  sMask = _sMask;
+    sMask = _sMask;
 }
 
+void Sample::suggestSegments(EGBS &segmentor,int k,int v){
+    segmentor.applySegmentation(suggstedSegments,k,v);
+}
+
+void Sample::generateMask(){
+    img.copyTo(segmentaions);
+    for(int i = 0;i < drawingMask.rows;i++){
+        for(int j=0;j<drawingMask.cols;j++){
+            if(drawingMask.at<cv::Vec3b>(i,j) != cv::Vec3b(0,0,0) ){
+                segmentaions.at<cv::Vec3b>(i,j) = drawingMask.at<cv::Vec3b>(i,j);
+            }
+        }
+    }
+}
 cv::Mat Sample::getSMask(){
-  return sMask;
+  return suggstedSegments;
 }
 
 std::string Sample::getName(){

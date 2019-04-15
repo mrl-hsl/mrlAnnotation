@@ -7,6 +7,7 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include "selector.h"
+#include "EGBS.h"
 
 class Sample : public Selector{
 
@@ -16,11 +17,13 @@ public:
   void imRead();
 
   void setSMask(cv::Mat _sMask);
-  void removeSegment(cv::Vec3b color);
+  void suggestSegments(EGBS& segmentor,int k,int v);
 
   cv::Mat getImg();
   cv::Mat getMask();
   cv::Mat getSMask();
+  void generateMask();
+
 
   std::string getName();
   std::string getPath();

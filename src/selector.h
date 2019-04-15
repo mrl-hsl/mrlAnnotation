@@ -16,9 +16,11 @@ public:
   void selectBox(cv::Point,int);
   void selectPolygon(cv::Point,int);
   void selectLine(cv::Point,int);
-  void selectSegment(cv::Scalar,int);
+  void selectSegment(cv::Point,int);
   void removeBox(cv::Point);
   void removePolygon(cv::Point);
+  void removeSegment(cv::Point);
+
 
   void fillPolygon(Polygon&,cv::Scalar);
 //    inline bool inBox(cv::Point,cv::Rect);
@@ -29,9 +31,10 @@ public:
   Line tLine;
   Polygon tPolygons;
   bbox tBox;
-  cv::Mat mask;
+  cv::Mat segmentaions;
   cv::Mat drawingMask;
   cv::Mat selectionMask;
+  cv::Mat suggstedSegments;
 
 private:
   bool drawing = false;

@@ -50,6 +50,17 @@ void Selector::selectLine(cv::Point point, int type){
   }
 }
 
+void Selector::selectSegment(cv::Point point, int type){
+    cv::Vec3b slectedSegment =  suggstedSegments.at<cv::Vec3b>(point);
+    for(int i = 0;i < suggstedSegments.rows;i++){
+        for(int j=0;j<suggstedSegments.cols;j++){
+            if(suggstedSegments.at<cv::Vec3b>(i,j) == slectedSegment){
+                drawingMask.at<cv::Vec3b>(i,j) = cv::Vec3b(type,type,type);
+            }
+        }
+    }
+}
+
 void Selector::removeBox(cv::Point point){
   if(drawing){
     drawing = false;
@@ -99,6 +110,20 @@ void Selector::removePolygon(cv::Point in_P){
     }
   }
 }
+
+void Selector::removeSegment(cv::Point point){
+    cv::Vec3b slectedSegment =  suggstedSegments.at<cv::Vec3b>(point);
+    for(int i = 0;i < suggstedSegments.rows;i++){
+        for(int j=0;j<suggstedSegments.cols;j++){
+            if(suggstedSegments.at<cv::Vec3b>(i,j) == slectedSegment){
+                drawingMask.at<cv::Vec3b>(i,j) = cv::Vec3b(0,0,0);
+            }
+        }
+    }
+}
+
+
+
 
 void Selector::fillPolygon(Polygon &polygon,cv::Scalar classType){
     // TODO add support for non convex polygons

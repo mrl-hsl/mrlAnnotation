@@ -24,8 +24,8 @@ public:
   ~tool();
   void showSample();
   void loadSample();
-  void suggestSegments();
   void showAnnotation(cv::Mat& img);
+  void showSegmentaion(cv::Mat & img);
 private slots:
   void on_btn_Open_clicked();
 
@@ -58,6 +58,8 @@ private slots:
   void on_t_penalty_clicked();
 
   void on_radioButton_clicked();
+  void on_showMask_clicked();
+
 private:
   Ui::tool *ui;
   dataSet _dataSet;
