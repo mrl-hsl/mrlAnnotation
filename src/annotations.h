@@ -17,13 +17,13 @@ struct Polygon{
   }
 
   void clear(){points.clear();}
-  int type;
+  cv::Vec3b type;
 };
 
 struct Line{
   Line() {}
   cv::Point p1,p2;
-  int type;
+  cv::Vec3b type;
 };
 
 struct goalPost{

@@ -21,7 +21,7 @@ void Selector::selectBox(cv::Point point, int type){
   }
 }
 
-void Selector::selectPolygon(cv::Point point, int type){
+void Selector::selectPolygon(cv::Point point, cv::Vec3b type){
   if(drawing){
     if(cv::norm(*tPolygons.begin()-point)<10){
       tPolygons.push(*tPolygons.begin());
@@ -38,7 +38,7 @@ void Selector::selectPolygon(cv::Point point, int type){
   }
 }
 
-void Selector::selectLine(cv::Point point, int type){
+void Selector::selectLine(cv::Point point, cv::Vec3b type){
   if(drawing){
     tLine.p2 = point;
     lines.push_back(tLine);
@@ -50,12 +50,12 @@ void Selector::selectLine(cv::Point point, int type){
   }
 }
 
-void Selector::selectSegment(cv::Point point, int type){
+void Selector::selectSegment(cv::Point point, cv::Vec3b type){
     cv::Vec3b slectedSegment =  suggstedSegments.at<cv::Vec3b>(point);
     for(int i = 0;i < suggstedSegments.rows;i++){
         for(int j=0;j<suggstedSegments.cols;j++){
             if(suggstedSegments.at<cv::Vec3b>(i,j) == slectedSegment){
-                drawingMask.at<cv::Vec3b>(i,j) = cv::Vec3b(type,type,type);
+                drawingMask.at<cv::Vec3b>(i,j) = type;
             }
         }
     }
@@ -111,11 +111,11 @@ void Selector::removePolygon(cv::Point in_P){
   }
 }
 
-void Selector::removeSegment(cv::Point point){
+void Selector::removeSegment(cv::Point point, cv::Vec3b classType){
     cv::Vec3b slectedSegment =  suggstedSegments.at<cv::Vec3b>(point);
     for(int i = 0;i < suggstedSegments.rows;i++){
         for(int j=0;j<suggstedSegments.cols;j++){
-            if(suggstedSegments.at<cv::Vec3b>(i,j) == slectedSegment){
+            if(suggstedSegments.at<cv::Vec3b>(i,j) == slectedSegment && drawingMask.at<cv::Vec3b>(i,j) == classType){
                 drawingMask.at<cv::Vec3b>(i,j) = cv::Vec3b(0,0,0);
             }
         }
@@ -125,7 +125,8 @@ void Selector::removeSegment(cv::Point point){
 
 
 
-void Selector::fillPolygon(Polygon &polygon,cv::Scalar classType){
+void Selector::fillPolygon(Polygon &polygon){
     // TODO add support for non convex polygons
+    cv::Scalar classType(polygon.type[0],polygon.type[1],polygon.type[2]);
     cv::fillConvexPoly(selectionMask,polygon.points,classType);
 }

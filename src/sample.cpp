@@ -12,9 +12,8 @@ void Sample::imRead(){
     sMask = cv::Mat(img.rows,img.cols,CV_8UC3,cv::Scalar(0,0,0));
     selectionMask = cv::Mat(img.rows,img.cols,CV_8UC3,cv::Scalar(0,0,0));
     drawingMask = cv::Mat(img.rows,img.cols,CV_8UC3,cv::Scalar(0,0,0));
-    img.copyTo(suggstedSegments);
     cv::cvtColor(img,img,CV_BGR2RGB);
-    cv::cvtColor(suggstedSegments,suggstedSegments,CV_BGR2RGB);
+    //cv::cvtColor(suggstedSegments,suggstedSegments,CV_BGR2RGB);
     }
 }
 
@@ -38,6 +37,7 @@ void Sample::setSMask(cv::Mat _sMask){
 }
 
 void Sample::suggestSegments(EGBS &segmentor,int k,int v){
+    img.copyTo(suggstedSegments);
     segmentor.applySegmentation(suggstedSegments,k,v);
 }
 

@@ -1,13 +1,12 @@
 #include "tool.h"
-
+typedef std::pair<int , cv::Vec3b> label;
 tool::tool(QWidget *parent) :
   QMainWindow(parent),
   ui(new Ui::tool){
 
   ui->setupUi(this);
 
-  type = cv::Vec3b(0,255,0);
-
+  type = 1;
   ui->t_grass->setChecked(true);
   ui->s_line->setChecked(true);
 
@@ -29,6 +28,13 @@ tool::tool(QWidget *parent) :
   sh_save->setKey(Qt::Key_S);
   QObject::connect(sh_save, SIGNAL(activated()), this, SLOT(on_save_clicked()));
 
+  classColore.insert(label(0,cv::Vec3b(0,0,0)));       //background
+  classColore.insert(label(1,cv::Vec3b(255,0,0)));     //lines
+  classColore.insert(label(2,cv::Vec3b(0,255,0)));     //grass
+
+  classColore.insert(label(3,cv::Vec3b(0,0,255)));     //ball
+  classColore.insert(label(4,cv::Vec3b(255,255,0)));     //robot
+
 }
 
 tool::~tool(){
@@ -36,9 +42,7 @@ tool::~tool(){
 }
 
 void tool::loadSample(){
-  std::cout<<"ggg"<<std::endl;
   _dataSet.current->imRead();
-  std::cout<<"read"<<std::endl;
   _dataSet.current->suggestSegments(egbs,ui->k->value(),ui->v->value());
   tool::showSample();
 }
@@ -48,37 +52,39 @@ void tool::showAnnotation(cv::Mat &img){
   if(_dataSet.current->is_drawing()){
     if(ui->s_box->isChecked()){
       cv::rectangle(img, cv::Point(_dataSet.current->tBox.box.x, _dataSet.current->tBox.box.y),
-        ui->lbl->pos, cv::Scalar(0,0,255), 2);
+        ui->lbl->pos, classColore.at(type), 2);
       }
       else if(ui->s_polygon->isChecked()){
         Polygon::iterator pt_it = _dataSet.current->tPolygons.begin();
         for(;pt_it < _dataSet.current->tPolygons.end()-1;pt_it++)
-          cv::line(img, *pt_it, *(pt_it+1), cv::Scalar(255,255,255));
-        cv::line(img,*(pt_it), ui->lbl->pos, cv::Scalar(255,255,255));
+          cv::line(img, *pt_it, *(pt_it+1), classColore.at(type));
+        cv::line(img,*(pt_it), ui->lbl->pos, classColore.at(type));
       }
       else if(ui->s_line->isChecked()){
-        cv::line(img,_dataSet.current->tLine.p1,ui->lbl->pos,cv::Scalar(255,255,255));
+        cv::line(img,_dataSet.current->tLine.p1,ui->lbl->pos,classColore.at(type));
       }
     }else{
     for(std::vector<bbox>::iterator bbox_it = _dataSet.current->objects.begin();bbox_it<_dataSet.current->objects.end();bbox_it++){
-      cv::rectangle(img,bbox_it->box,cv::Scalar(255,0,0),2);
+      cv::rectangle(img,bbox_it->box,classColore.at(bbox_it->type),2);
     }
     for(std::vector<Polygon>::iterator pol_it = _dataSet.current->polygons.begin();pol_it<_dataSet.current->polygons.end();pol_it++){
       for(Polygon::iterator pt_it = pol_it->begin() ; pt_it < pol_it->end()-1;pt_it++){
-        cv::line(img,*pt_it,*(pt_it+1),cv::Scalar(255,255,255));
+        cv::line(img,*pt_it,*(pt_it+1),pol_it->type);
       }
     }
     for(std::vector<Line>::iterator line_it=_dataSet.current->lines.begin(); line_it<_dataSet.current->lines.end(); line_it++){
-      cv::line(img,line_it->p1,line_it->p2,cv::Scalar(255,255,255));
+      cv::line(img,line_it->p1,line_it->p2,line_it->type);
     }
   }
 }
+
 void tool::showSegmentaion(cv::Mat & img){
     _dataSet.current->generateMask();
     std::cout<<"de"<<std::endl;
     _dataSet.current->segmentaions.copyTo(img);
     std::cout<<"deds"<<std::endl;
 }
+
 void tool::showSample(){
   cv::Mat img;
   _dataSet.current->getImg().copyTo(img);
@@ -88,11 +94,10 @@ void tool::showSample(){
     showAnnotation(img);
   }
 
-  ui->lbl->setPixmap(QPixmap::fromImage(QImage(img.data,img.cols,img.rows
-                                          ,img.step,QImage::Format_RGB888 )));
-  ui->lblMask->setPixmap(QPixmap::fromImage(QImage(_dataSet.current->suggstedSegments.data,img.cols,img.rows
-                                          ,img.step,QImage::Format_RGB888 )));
+  ui->lbl->setPixmap(QPixmap::fromImage(QImage(img.data,img.cols,img.rows,img.step,QImage::Format_RGB888 )));
+  ui->lblMask->setPixmap(QPixmap::fromImage(QImage(_dataSet.current->suggstedSegments.data,img.cols,img.rows,img.step,QImage::Format_RGB888 )));
 }
+
 
 void tool::on_btn_Open_clicked(){
   QDir dir = QFileDialog::getExistingDirectory(this, tr("select directory"));
@@ -129,6 +134,14 @@ void tool::on_btn_Prev_clicked(){
   _dataSet.prev();
   tool::loadSample();
 }
+
+void tool::on_save_clicked(){
+  if((int)_dataSet.getSize()<1){
+    return;
+  }
+    on_btn_Next_clicked();
+}
+
 void tool::on_k_editingFinished(){
   _dataSet.current->suggestSegments(egbs,ui->k->value(),ui->v->value());
   tool::showSample();
@@ -141,10 +154,9 @@ void tool::on_v_editingFinished(){
 
 void tool::mousePressd(){
   if(ui->lblMask->left==true){
-      _dataSet.current->selectSegment(ui->lblMask->pos,50);
+    _dataSet.current->selectSegment(ui->lblMask->pos, classColore.at(type) );
   }else{
-        _dataSet.current->removeSegment(ui->lblMask->pos);
-        std::cout<<"d23r"<<std::endl;
+    _dataSet.current->removeSegment(ui->lblMask->pos, classColore.at(type));
   }
   showSample();
 }
@@ -157,14 +169,15 @@ void tool::mousePose(){
                                                  ,color.step,QImage::Format_RGB888 )));
 }
 
+
 void tool::mousePressdOnImg(){
   if(ui->lbl->left){
     if(ui->s_box->isChecked()){
-      _dataSet.current->selectBox(ui->lbl->pos,classType);
+      _dataSet.current->selectBox(ui->lbl->pos,type);
     }else if(ui->s_polygon->isChecked()){
-      _dataSet.current->selectPolygon(ui->lbl->pos,classType);
+      _dataSet.current->selectPolygon(ui->lbl->pos,classColore.at(type));
     }else if(ui->s_line->isChecked()){
-      _dataSet.current->selectLine(ui->lbl->pos,classType);
+      _dataSet.current->selectLine(ui->lbl->pos,classColore.at(type));
     }
   }
   else{
@@ -181,39 +194,32 @@ void tool::mousePoseOnImg(){
   if(_dataSet.current->is_drawing())
     showSample();
 }
+
+
 void tool::on_t_lines_clicked(){
-  type = cv::Vec3b(255,255,255);
+  type = 1;
 }
 
 void tool::on_t_ball_clicked(){
-  type = cv::Vec3b(0,0,255);
+  type = 3;
 }
 
 void tool::on_t_grass_clicked(){
-  type = cv::Vec3b(0,255,0);
+  type = 2;
 }
 
-void tool::on_t_goal_clicked(){
-  type = cv::Vec3b(255,255,0);
+void tool::on_t_bg_clicked(){
+    type = 0;
+}
+
+void tool::on_t_robot_clicked(){
+    type = 4;
 }
 
 
-void tool::on_save_clicked(){
-  if((int)_dataSet.getSize()<1){
-    return;
-  }
-    //_dataSet.setSample(currentSample,current);
-    //_dataSet.saveSample(currentSample);
-    on_btn_Next_clicked();
-}
 
-void tool::on_t_penalty_clicked(){
-  type = cv::Vec3b(255,0,0);
-}
 
-void tool::on_radioButton_clicked(){
-  type=cv::Vec3b(0,255,255);
-}
+
 
 void tool::on_showMask_clicked(){
     showSample();

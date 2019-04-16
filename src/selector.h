@@ -14,15 +14,15 @@ public:
   bool is_drawing();
 
   void selectBox(cv::Point,int);
-  void selectPolygon(cv::Point,int);
-  void selectLine(cv::Point,int);
-  void selectSegment(cv::Point,int);
+  void selectPolygon(cv::Point,cv::Vec3b);
+  void selectLine(cv::Point,cv::Vec3b);
+  void selectSegment(cv::Point,cv::Vec3b);
   void removeBox(cv::Point);
   void removePolygon(cv::Point);
-  void removeSegment(cv::Point);
+  void removeSegment(cv::Point, cv::Vec3b classType);
 
 
-  void fillPolygon(Polygon&,cv::Scalar);
+  void fillPolygon(Polygon&);
 //    inline bool inBox(cv::Point,cv::Rect);
   bool inPol(const cv::Point, Polygon);
   std::vector<bbox> objects;

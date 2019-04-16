@@ -12,8 +12,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1518</width>
-    <height>739</height>
+    <width>1476</width>
+    <height>637</height>
    </rect>
   </property>
   <property name="font">
@@ -72,7 +72,7 @@
       <x>10</x>
       <y>0</y>
       <width>144</width>
-      <height>507</height>
+      <height>471</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -138,6 +138,13 @@
       </widget>
      </item>
      <item>
+      <widget class="Line" name="line_3">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QCheckBox" name="checkBox">
        <property name="tabletTracking">
         <bool>false</bool>
@@ -164,16 +171,16 @@
       </widget>
      </item>
      <item>
-      <widget class="QRadioButton" name="t_grass">
-       <property name="text">
-        <string>&amp;Grass</string>
+      <widget class="Line" name="line_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="Line" name="line">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+      <widget class="QRadioButton" name="t_grass">
+       <property name="text">
+        <string>&amp;Grass</string>
        </property>
       </widget>
      </item>
@@ -185,6 +192,20 @@
       </widget>
      </item>
      <item>
+      <widget class="QRadioButton" name="t_bg">
+       <property name="text">
+        <string>Background</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="Line" name="line">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QRadioButton" name="t_ball">
        <property name="text">
         <string>Ball</string>
@@ -192,23 +213,16 @@
       </widget>
      </item>
      <item>
-      <widget class="QRadioButton" name="t_goal">
+      <widget class="QRadioButton" name="t_robot">
        <property name="text">
-        <string>GoalPost</string>
+        <string>Robot</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QRadioButton" name="radioButton">
-       <property name="text">
-        <string>&amp;CenterCircle</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QRadioButton" name="t_penalty">
-       <property name="text">
-        <string>pe&amp;naltyMark</string>
+      <widget class="Line" name="line_4">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
@@ -229,12 +243,19 @@
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="Line" name="line_5">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
     </layout>
    </widget>
    <widget class="QWidget" name="horizontalLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>200</x>
+      <x>170</x>
       <y>0</y>
       <width>1291</width>
       <height>481</height>
@@ -293,10 +314,10 @@
    <widget class="QLabel" name="color">
     <property name="geometry">
      <rect>
-      <x>200</x>
-      <y>500</y>
-      <width>1281</width>
-      <height>141</height>
+      <x>170</x>
+      <y>490</y>
+      <width>1291</width>
+      <height>91</height>
      </rect>
     </property>
     <property name="mouseTracking">
@@ -313,9 +334,9 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>510</y>
-      <width>141</width>
-      <height>141</height>
+      <y>480</y>
+      <width>142</width>
+      <height>127</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -357,7 +378,7 @@
   <customwidget>
    <class>mqlabel</class>
    <extends>QLabel</extends>
-   <header location="global">mqlabel.h</header>
+   <header location="global">src/mqlabel.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

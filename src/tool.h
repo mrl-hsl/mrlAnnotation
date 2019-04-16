@@ -60,12 +60,16 @@ private slots:
   void on_radioButton_clicked();
   void on_showMask_clicked();
 
+  void on_t_bg_clicked();
+
+  void on_t_robot_clicked();
+
 private:
   Ui::tool *ui;
   dataSet _dataSet;
   EGBS egbs;
-  cv::Vec3b type;
-  int classType;
+  std::map<int,cv::Vec3b> classColore;
+  int type;
   void rm_selectors();
 
 
