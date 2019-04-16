@@ -22,7 +22,9 @@ public:
   cv::Mat getImg();
   cv::Mat getMask();
   cv::Mat getSMask();
+  void generateMask(cv::Mat &);
   void generateMask();
+  void save(const char * add);
 
 
   std::string getName();

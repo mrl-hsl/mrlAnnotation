@@ -139,6 +139,7 @@ void tool::on_save_clicked(){
   if((int)_dataSet.getSize()<1){
     return;
   }
+    _dataSet.current->save("./data/");
     on_btn_Next_clicked();
 }
 
@@ -215,11 +216,6 @@ void tool::on_t_bg_clicked(){
 void tool::on_t_robot_clicked(){
     type = 4;
 }
-
-
-
-
-
 
 void tool::on_showMask_clicked(){
     showSample();

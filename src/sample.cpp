@@ -51,6 +51,27 @@ void Sample::generateMask(){
         }
     }
 }
+void Sample::generateMask(cv::Mat& mat){
+    mat = cv::Mat(img.rows,img.cols,CV_8UC3,cv::Scalar(0,0,0));
+    for(int i = 0;i < drawingMask.rows;i++){
+        for(int j=0;j<drawingMask.cols;j++){
+            if(drawingMask.at<cv::Vec3b>(i,j) != cv::Vec3b(0,0,0) ){
+                mat.at<cv::Vec3b>(i,j) = drawingMask.at<cv::Vec3b>(i,j);
+            }
+        }
+    }
+}
+
+void Sample::save(const char *add){
+    if(!img.empty()){
+        cv::Mat mask;
+        cv::cvtColor(img,img,CV_RGB2BGR);
+        cv::imwrite(std::string(add)+fileName,img);
+        generateMask(mask);
+        cv::cvtColor(mask,mask,CV_RGB2BGR);
+        cv::imwrite(std::string(add)+"l_"+fileName,mask);
+    }
+}
 cv::Mat Sample::getSMask(){
   return suggstedSegments;
 }

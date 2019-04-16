@@ -51,13 +51,8 @@ private slots:
 
   void on_t_grass_clicked();
 
-  void on_t_goal_clicked();
-
   void on_save_clicked();
 
-  void on_t_penalty_clicked();
-
-  void on_radioButton_clicked();
   void on_showMask_clicked();
 
   void on_t_bg_clicked();
