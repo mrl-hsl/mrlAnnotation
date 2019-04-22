@@ -28,6 +28,15 @@ tool::tool(QWidget *parent) :
   sh_save->setKey(Qt::Key_S);
   QObject::connect(sh_save, SIGNAL(activated()), this, SLOT(on_save_clicked()));
 
+//  QShortcut * sh_incThick = new QShortcut(this);
+//  sh_incThick->setKey(Qt::Key_Control + Qt::Key_Up);
+//  QObject::connect(sh_incThick, SIGNAL(activated()), this, [this](){ui->thickness->setValue(ui->thickness->value()+1);});
+
+
+//  QShortcut * sh_decThick = new QShortcut(this);
+//  sh_decThick->setKey(Qt::Key_Control + Qt::Key_Up);
+//  QObject::connect(sh_decThick, SIGNAL(activated()), this, [this](){ui->thickness->setValue(ui->thickness->value()-1);});
+
   classColore.insert(label(0,cv::Vec3b(0,0,0)));       //background
   classColore.insert(label(1,cv::Vec3b(255,0,0)));     //lines
   classColore.insert(label(2,cv::Vec3b(0,255,0)));     //grass
@@ -61,7 +70,7 @@ void tool::showAnnotation(cv::Mat &img){
         cv::line(img,*(pt_it), ui->lbl->pos, classColore.at(type));
       }
       else if(ui->s_line->isChecked()){
-        cv::line(img,_dataSet.current->tLine.p1,ui->lbl->pos,classColore.at(type));
+        cv::line(img,_dataSet.current->tLine.p1,ui->lbl->pos,classColore.at(type),ui->thickness->value());
       }
     }else{
     for(std::vector<bbox>::iterator bbox_it = _dataSet.current->objects.begin();bbox_it<_dataSet.current->objects.end();bbox_it++){
@@ -73,16 +82,16 @@ void tool::showAnnotation(cv::Mat &img){
       }
     }
     for(std::vector<Line>::iterator line_it=_dataSet.current->lines.begin(); line_it<_dataSet.current->lines.end(); line_it++){
-      cv::line(img,line_it->p1,line_it->p2,line_it->type);
+      cv::line(img,line_it->p1,line_it->p2,line_it->type,line_it->thickness);
     }
   }
 }
 
 void tool::showSegmentaion(cv::Mat & img){
     _dataSet.current->generateMask();
-    std::cout<<"de"<<std::endl;
+//    std::cout<<"de"<<std::endl;
     _dataSet.current->segmentaions.copyTo(img);
-    std::cout<<"deds"<<std::endl;
+//    std::cout<<"deds"<<std::endl;
 }
 
 void tool::showSample(){
@@ -178,7 +187,8 @@ void tool::mousePressdOnImg(){
     }else if(ui->s_polygon->isChecked()){
       _dataSet.current->selectPolygon(ui->lbl->pos,classColore.at(type));
     }else if(ui->s_line->isChecked()){
-      _dataSet.current->selectLine(ui->lbl->pos,classColore.at(type));
+        ui->thickness->setFocus();
+      _dataSet.current->selectLine(ui->lbl->pos,classColore.at(type),ui->thickness->value());
     }
   }
   else{
@@ -187,6 +197,9 @@ void tool::mousePressdOnImg(){
     }
     else if(ui->s_polygon->isChecked()){
       _dataSet.current->removePolygon(ui->lbl->pos);
+    }
+    else if(ui->s_line->isChecked()){
+        _dataSet.current->removeLine();
     }
   }
   showSample();
@@ -216,6 +229,7 @@ void tool::on_t_bg_clicked(){
 void tool::on_t_robot_clicked(){
     type = 4;
 }
+
 
 void tool::on_showMask_clicked(){
     showSample();

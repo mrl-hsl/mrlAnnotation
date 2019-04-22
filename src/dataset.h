@@ -13,7 +13,7 @@ public:
   void initDataSet(){current = samples.begin();}
   Sample getSample(int id);
   void setSample(int id,Sample);
-  void saveSample(int id);
+
   int getSize();
 
   typedef std::vector<Sample>::iterator iterator;

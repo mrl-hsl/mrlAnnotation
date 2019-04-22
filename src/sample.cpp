@@ -50,15 +50,27 @@ void Sample::generateMask(){
             }
         }
     }
+    for(auto line: lines){
+        cv::line(segmentaions,line.p1,line.p2,line.type,line.thickness);
+    }
 }
 void Sample::generateMask(cv::Mat& mat){
     mat = cv::Mat(img.rows,img.cols,CV_8UC3,cv::Scalar(0,0,0));
+    for(auto polygon: polygons){
+        fillPolygon(polygon);
+    }
     for(int i = 0;i < drawingMask.rows;i++){
         for(int j=0;j<drawingMask.cols;j++){
             if(drawingMask.at<cv::Vec3b>(i,j) != cv::Vec3b(0,0,0) ){
                 mat.at<cv::Vec3b>(i,j) = drawingMask.at<cv::Vec3b>(i,j);
             }
+            if(selectionMask.at<cv::Vec3b>(i,j) != cv::Vec3b(0,0,0) ){
+                mat.at<cv::Vec3b>(i,j) = selectionMask.at<cv::Vec3b>(i,j);
+            }
         }
+    }
+    for(auto line: lines){
+        cv::line(mat,line.p1,line.p2,line.type,line.thickness);
     }
 }
 

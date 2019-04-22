@@ -38,11 +38,12 @@ void Selector::selectPolygon(cv::Point point, cv::Vec3b type){
   }
 }
 
-void Selector::selectLine(cv::Point point, cv::Vec3b type){
+void Selector::selectLine(cv::Point point, cv::Vec3b type,int thickness){
   if(drawing){
     tLine.p2 = point;
-    lines.push_back(tLine);
     tLine.type = type;
+    tLine.thickness = thickness;
+    lines.push_back(tLine);
     drawing = false;
   }else{
     tLine.p1 = point;
@@ -119,6 +120,14 @@ void Selector::removeSegment(cv::Point point, cv::Vec3b classType){
                 drawingMask.at<cv::Vec3b>(i,j) = cv::Vec3b(0,0,0);
             }
         }
+    }
+}
+
+void Selector::removeLine(){
+    if(drawing){
+        drawing = false;
+    }else{
+        lines.pop_back();
     }
 }
 

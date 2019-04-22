@@ -15,11 +15,12 @@ public:
 
   void selectBox(cv::Point,int);
   void selectPolygon(cv::Point,cv::Vec3b);
-  void selectLine(cv::Point,cv::Vec3b);
+  void selectLine(cv::Point, cv::Vec3b, int thickness);
   void selectSegment(cv::Point,cv::Vec3b);
   void removeBox(cv::Point);
   void removePolygon(cv::Point);
   void removeSegment(cv::Point, cv::Vec3b classType);
+  void removeLine();
 
 
   void fillPolygon(Polygon&);

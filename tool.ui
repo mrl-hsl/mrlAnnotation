@@ -363,6 +363,9 @@
      </item>
      <item>
       <widget class="QSpinBox" name="thickness">
+       <property name="maximum">
+        <number>1099</number>
+       </property>
        <property name="value">
         <number>1</number>
        </property>

@@ -24,6 +24,7 @@ struct Line{
   Line() {}
   cv::Point p1,p2;
   cv::Vec3b type;
+  int thickness{2};
 };
 
 struct goalPost{
