@@ -59,6 +59,22 @@ private slots:
 
   void on_t_robot_clicked();
 
+  void on_minH_valueChanged(int arg1);
+
+  void on_maxH_valueChanged(int arg1);
+
+  void on_minS_valueChanged(const QString &arg1);
+
+  void on_maxS_valueChanged(int arg1);
+
+  void on_minV_valueChanged(const QString &arg1);
+
+  void on_maxV_valueChanged(const QString &arg1);
+
+  void on_btn_add_clicked();
+
+  void on_pushButton_clicked();
+
 private:
   Ui::tool *ui;
   dataSet _dataSet;

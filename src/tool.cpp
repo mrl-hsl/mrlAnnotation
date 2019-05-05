@@ -52,7 +52,10 @@ tool::~tool(){
 
 void tool::loadSample(){
   _dataSet.current->imRead();
-  _dataSet.current->suggestSegments(egbs,ui->k->value(),ui->v->value());
+  if(ui->chk_EGBS->isChecked())
+    _dataSet.current->suggestSegments(egbs,ui->k->value(),ui->v->value());
+  else if(ui->chk_tresh->isChecked())
+    _dataSet.current->treshold(ui->minH->value(),ui->minS->value(),ui->minV->value(),ui->maxH->value(),ui->maxS->value(),ui->maxV->value());
   tool::showSample();
 }
 
@@ -104,7 +107,11 @@ void tool::showSample(){
   }
 
   ui->lbl->setPixmap(QPixmap::fromImage(QImage(img.data,img.cols,img.rows,img.step,QImage::Format_RGB888 )));
-  ui->lblMask->setPixmap(QPixmap::fromImage(QImage(_dataSet.current->suggstedSegments.data,img.cols,img.rows,img.step,QImage::Format_RGB888 )));
+  if(ui->chk_EGBS->isChecked()){
+      ui->lblMask->setPixmap(QPixmap::fromImage(QImage(_dataSet.current->suggstedSegments.data,img.cols,img.rows,img.step,QImage::Format_RGB888 )));
+  }else if(ui->chk_tresh->isChecked()){
+      ui->lblMask->setPixmap(QPixmap::fromImage(QImage(_dataSet.current->tresholdMask.data,_dataSet.current->tresholdMask.cols,_dataSet.current->tresholdMask.rows,_dataSet.current->tresholdMask.step,QImage::Format_Grayscale8 )));
+  }
 }
 
 
@@ -163,20 +170,22 @@ void tool::on_v_editingFinished(){
 }
 
 void tool::mousePressd(){
-  if(ui->lblMask->left==true){
-    _dataSet.current->selectSegment(ui->lblMask->pos, classColore.at(type) );
-  }else{
-    _dataSet.current->removeSegment(ui->lblMask->pos, classColore.at(type));
-  }
+    if(ui->chk_EGBS->isChecked()){
+        if(ui->lblMask->left==true){
+          _dataSet.current->selectSegment(ui->lblMask->pos, classColore.at(type) );
+        }else{
+          _dataSet.current->removeSegment(ui->lblMask->pos, classColore.at(type));
+        }
+    }
   showSample();
 }
 
 void tool::mousePose(){
-  cv::Mat sMask = _dataSet.current->getSMask();
-  cv::Vec3b segment = sMask.at<cv::Vec3b>(ui->lblMask->y,ui->lblMask->x);
-  cv::Mat color(ui->color->height(),ui->color->width(),CV_8UC3,cv::Scalar(segment[0],segment[1],segment[2]));
-  ui->color->setPixmap(QPixmap::fromImage(QImage(color.data,color.cols,color.rows
-                                                 ,color.step,QImage::Format_RGB888 )));
+//  cv::Mat sMask = _dataSet.current->getSMask();
+//  cv::Vec3b segment = sMask.at<cv::Vec3b>(ui->lblMask->y,ui->lblMask->x);
+//  cv::Mat color(ui->color->height(),ui->color->width(),CV_8UC3,cv::Scalar(segment[0],segment[1],segment[2]));
+//  ui->color->setPixmap(QPixmap::fromImage(QImage(color.data,color.cols,color.rows
+//                                                 ,color.step,QImage::Format_RGB888 )));
 }
 
 
@@ -232,5 +241,46 @@ void tool::on_t_robot_clicked(){
 
 
 void tool::on_showMask_clicked(){
+    showSample();
+}
+
+void tool::on_minH_valueChanged(int arg1){
+    _dataSet.current->treshold(ui->minH->value(),ui->minS->value(),ui->minV->value(),ui->maxH->value(),ui->maxS->value(),ui->maxV->value());
+    tool::showSample();
+
+}
+
+void tool::on_maxH_valueChanged(int arg1){
+    _dataSet.current->treshold(ui->minH->value(),ui->minS->value(),ui->minV->value(),ui->maxH->value(),ui->maxS->value(),ui->maxV->value());
+    tool::showSample();
+}
+
+void tool::on_minS_valueChanged(const QString &arg1){
+    _dataSet.current->treshold(ui->minH->value(),ui->minS->value(),ui->minV->value(),ui->maxH->value(),ui->maxS->value(),ui->maxV->value());
+    tool::showSample();
+}
+
+void tool::on_maxS_valueChanged(int arg1){
+    _dataSet.current->treshold(ui->minH->value(),ui->minS->value(),ui->minV->value(),ui->maxH->value(),ui->maxS->value(),ui->maxV->value());
+    tool::showSample();
+}
+
+void tool::on_minV_valueChanged(const QString &arg1){
+    _dataSet.current->treshold(ui->minH->value(),ui->minS->value(),ui->minV->value(),ui->maxH->value(),ui->maxS->value(),ui->maxV->value());
+    tool::showSample();
+}
+
+void tool::on_maxV_valueChanged(const QString &arg1){
+    _dataSet.current->treshold(ui->minH->value(),ui->minS->value(),ui->minV->value(),ui->maxH->value(),ui->maxS->value(),ui->maxV->value());
+    tool::showSample();
+}
+
+void tool::on_btn_add_clicked(){
+    _dataSet.current->selectTreshold(classColore.at(type));
+    showSample();
+}
+
+void tool::on_pushButton_clicked(){
+    _dataSet.current->reversTreshoding();
     showSample();
 }

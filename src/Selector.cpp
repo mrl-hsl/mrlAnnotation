@@ -62,6 +62,17 @@ void Selector::selectSegment(cv::Point point, cv::Vec3b type){
     }
 }
 
+void Selector::selectTreshold(cv::Vec3b type){
+    for(int i = 0;i < tresholdMask.rows;i++){
+        for(int j=0;j<tresholdMask.cols;j++){
+            if(tresholdMask.at<uchar>(i,j) == 255){
+                drawingMask.at<cv::Vec3b>(i,j) = type;
+            }
+        }
+    }
+}
+
+
 void Selector::removeBox(cv::Point point){
   if(drawing){
     drawing = false;
@@ -131,11 +142,15 @@ void Selector::removeLine(){
     }
 }
 
+void Selector::treshold(int minH, int minS, int minV, int maxH, int maxS, int maxV){
+    cv::inRange(hsvImg,cv::Scalar(minH,minS,minV),cv::Scalar(maxH,maxS,maxV),tresholdMask);
+}
 
 
 
-void Selector::fillPolygon(Polygon &polygon){
+
+void Selector::fillPolygon(Polygon &polygon,cv::Mat mask){
     // TODO add support for non convex polygons
     cv::Scalar classType(polygon.type[0],polygon.type[1],polygon.type[2]);
-    cv::fillConvexPoly(selectionMask,polygon.points,classType);
+    cv::fillConvexPoly(mask,polygon.points,classType);
 }

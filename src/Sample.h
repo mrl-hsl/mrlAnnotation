@@ -25,6 +25,7 @@ public:
   void generateMask(cv::Mat &);
   void generateMask();
   void save(const char * add);
+  void reversTreshoding();
 
 
   std::string getName();

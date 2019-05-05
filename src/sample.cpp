@@ -14,6 +14,8 @@ void Sample::imRead(){
     drawingMask = cv::Mat(img.rows,img.cols,CV_8UC3,cv::Scalar(0,0,0));
     cv::cvtColor(img,img,CV_BGR2RGB);
     //cv::cvtColor(suggstedSegments,suggstedSegments,CV_BGR2RGB);
+    cv::cvtColor(img,hsvImg,CV_RGB2HSV);
+
     }
 }
 
@@ -53,12 +55,12 @@ void Sample::generateMask(){
     for(auto line: lines){
         cv::line(segmentaions,line.p1,line.p2,line.type,line.thickness);
     }
+    for(auto polygon: polygons){
+        fillPolygon(polygon,segmentaions);
+    }
 }
 void Sample::generateMask(cv::Mat& mat){
     mat = cv::Mat(img.rows,img.cols,CV_8UC3,cv::Scalar(0,0,0));
-    for(auto polygon: polygons){
-        fillPolygon(polygon);
-    }
     for(int i = 0;i < drawingMask.rows;i++){
         for(int j=0;j<drawingMask.cols;j++){
             if(drawingMask.at<cv::Vec3b>(i,j) != cv::Vec3b(0,0,0) ){
@@ -72,6 +74,9 @@ void Sample::generateMask(cv::Mat& mat){
     for(auto line: lines){
         cv::line(mat,line.p1,line.p2,line.type,line.thickness);
     }
+    for(auto polygon: polygons){
+        fillPolygon(polygon,mat);
+    }
 }
 
 void Sample::save(const char *add){
@@ -83,6 +88,10 @@ void Sample::save(const char *add){
         cv::cvtColor(mask,mask,CV_RGB2BGR);
         cv::imwrite(std::string(add)+"l_"+fileName,mask);
     }
+}
+
+void Sample::reversTreshoding(){
+    tresholdMask = 255 - tresholdMask;
 }
 cv::Mat Sample::getSMask(){
   return suggstedSegments;

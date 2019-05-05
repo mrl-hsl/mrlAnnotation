@@ -17,13 +17,15 @@ public:
   void selectPolygon(cv::Point,cv::Vec3b);
   void selectLine(cv::Point, cv::Vec3b, int thickness);
   void selectSegment(cv::Point,cv::Vec3b);
+  void selectTreshold(cv::Vec3b);
   void removeBox(cv::Point);
   void removePolygon(cv::Point);
   void removeSegment(cv::Point, cv::Vec3b classType);
   void removeLine();
+  void treshold(int minH,int minS,int minV,int maxH,int maxS, int maxV);
 
 
-  void fillPolygon(Polygon&);
+  void fillPolygon(Polygon&, cv::Mat mask);
 //    inline bool inBox(cv::Point,cv::Rect);
   bool inPol(const cv::Point, Polygon);
   std::vector<bbox> objects;
@@ -36,6 +38,8 @@ public:
   cv::Mat drawingMask;
   cv::Mat selectionMask;
   cv::Mat suggstedSegments;
+  cv::Mat hsvImg;
+  cv::Mat tresholdMask;
 
 private:
   bool drawing = false;
